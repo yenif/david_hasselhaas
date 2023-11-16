@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "sdetgpt"
+version = "0.1.0"
+description = ""
+authors = ["Brian Finney <brian.finney@mybrightwheel.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+pyautogen = {git = "https://github.com/microsoft/autogen"}
+openai = "^1.1.1"
+inflection = "^0.5.1"
+transitions = "^0.9.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

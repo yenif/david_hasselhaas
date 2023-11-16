@@ -1,0 +1,51 @@
+import os
+from .tool import Tool
+
+class WriteTextToFile(Tool):
+    def gpt4_assistants_tool(self):
+        return {
+            "type": "function",
+            "function": {
+                "name": self.name,
+                "description": "Write new_text to a file specified by relative_path. Optionally specify start_offset as the character offset index to insert new_text, defaults to 0, negative start_offset indexes from the end of the file. If text_to_replace is not blank, then the first instance of text_to_replace after start_offset will be replaced with new_text.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "relative_path": {"type": "string", "description": "Relative path to the file to write"},
+                        "new_text": {"type": "string", "description": "New text to insert in to the file"},
+                        "text_to_replace": {"type": "string", "description": "If present, the first instance of text_to_replace after start_offset will be replaced with new_text"},
+                        "start_offset": {"type": "string", "description": "Start character offset for the write, defaults to 0, negative start_offset indexes from the end of the file"}
+                    },
+                    "required": ["relative_path", "new_text"]
+                }
+            }
+        }
+
+    def do_it(self, relative_path, new_text, text_to_replace="", start_offset=0):
+        # Enforce that all paths are within the current directory
+        full_path = self.enforce_relative_path(relative_path)
+
+        # Create path if it doesn't exist
+        if not os.path.exists(relative_path):
+            os.makedirs(os.path.dirname(relative_path), exist_ok=True)
+            open(relative_path, 'w').close()
+
+        # Check if the path is a file
+        if not os.path.isfile(relative_path):
+            raise ValueError(f"The path {relative_path} is not a file.")
+
+        with open(relative_path, 'r+t', encoding='utf-8') as file:
+            content = file.read()
+            if start_offset < 0:
+                start_offset += len(content)  # Negative indexing from the end
+            # Replace the specified text if any
+            if text_to_replace:
+                content = content[:start_offset] + content[start_offset:].replace(text_to_replace, new_text)
+            else:
+                content = content[:start_offset] + new_text + content[start_offset:]
+
+            file.seek(0)
+            file.truncate()
+            file.write(content)
+
+        return True
