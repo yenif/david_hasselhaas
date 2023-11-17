@@ -17,11 +17,13 @@ class AgentManager(object):
     def get_agent(self, agent_id):
         return self.agent_registry.get(agent_id, None)
 
-    def terminate_agent(self, agent_id):
+    def transition_state(self, agent_id, transition, *args, **kwargs):
         agent = self.get_agent(agent_id)
         if not agent:
             return f"Agent with ID {agent_id} not found."
-        if agent.state != 'terminated':  # Ensure the agent is not already terminated
-            self.transition_state(agent_id, 'terminate')
-        del self.agent_registry[agent_id]
-        return f"Agent {agent_id} has been terminated."
+        try:
+            trigger = getattr(agent, transition)
+            trigger(*args, **kwargs)
+            return f"Transition {transition} triggered for agent {agent_id}."
+        except AttributeError:
+            return f"Invalid transition {transition} for agent {agent_id}."
