@@ -5,6 +5,7 @@ from haas.agents.GPT4Agent import GPT4Agent
 from haas.tools.list_directory import ListDirectory
 from haas.tools.read_text_from_file import ReadTextFromFile
 from haas.tools.write_text_to_file import WriteTextToFile
+from haas.tools.read_code_from_file import ReadCodeFromFile
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
@@ -17,6 +18,7 @@ if __name__ == '__main__':
             ListDirectory(),
             ReadTextFromFile(),
             WriteTextToFile(),
+            ReadCodeFromFile(),
         ],
     )
 

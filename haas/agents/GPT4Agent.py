@@ -1,6 +1,7 @@
 import logging
 import inspect
 from autogen.agentchat.contrib.gpt_assistant_agent import GPTAssistantAgent
+from haas.lib.agent_manager.agent_manager import AgentManager
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,8 @@ class GPT4Agent(GPTAssistantAgent):
         )
 
         self.register_function(tool_functions)
+
+        self.agent_manager = AgentManager()
 
         logger.info(inspect.cleandoc(f"""
             GPT4Agent {self.name} initialized with tools: {", ".join([tool.name for tool in tools])}

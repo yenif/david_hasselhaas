@@ -11,6 +11,11 @@ pyautogen = {git = "https://github.com/microsoft/autogen"}
 openai = "^1.1.1"
 inflection = "^0.5.1"
 transitions = "^0.9.0"
+tree-sitter = "^0.20.4"
+tree-sitter-languages = "^1.8.0"
+tree-sitter-requirements = "^0.1.5"
+tree-sitter-parsers = "^0.0.7"
+tree-sitter-types = "^0.0.2"
 
 [build-system]
 requires = ["poetry-core"]
