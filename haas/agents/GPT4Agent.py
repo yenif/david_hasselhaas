@@ -1,10 +1,6 @@
 import logging
-from autogen import UserProxyAgent
+import inspect
 from autogen.agentchat.contrib.gpt_assistant_agent import GPTAssistantAgent
-
-from haas.tools.list_directory import ListDirectory
-from haas.tools.read_text_from_file import ReadTextFromFile
-from haas.tools.write_text_to_file import WriteTextToFile
 
 logger = logging.getLogger(__name__)
 
@@ -22,12 +18,22 @@ class GPT4Agent(GPTAssistantAgent):
     def __init__(self,
                  name,
                  instructions,
-                 tools=[]):
+                 tools=[]
+                 ):
 
         self.llm_config = self.DEFAULT_LLM_CONFIG.copy()
         self.llm_config.setdefault("tools", []).extend([tool.gpt4_assistants_tool() for tool in tools]) # type: ignore
         self.instructions = instructions
         self.tools = self.llm_config["tools"]
+
+        tool_functions = dict()
+        tool_instructions = []
+        for tool in tools:
+            tool.set_agent(self)
+            tool_functions[tool.name] = tool.do_it
+            tool_instructions.append(tool.gpt4_prompt_instructions())
+        
+        instruction = "\n".join((instructions, *tool_instructions))
 
         super().__init__(
             name=name,
@@ -35,11 +41,10 @@ class GPT4Agent(GPTAssistantAgent):
             llm_config=self.llm_config
         )
 
-        self.register_function(dict([(tool.name, tool.do_it) for tool in tools]))
+        self.register_function(tool_functions)
 
-        logger.info(f"""
-GPT4Agent {self.name} initialized with tools: {", ".join([tool.name for tool in tools])}
+        logger.info(inspect.cleandoc(f"""
+            GPT4Agent {self.name} initialized with tools: {", ".join([tool.name for tool in tools])}
 
-Instructions:
-{self.instructions}
-""")
+            Instructions:
+            """) + self.instructions)

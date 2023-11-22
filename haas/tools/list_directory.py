@@ -1,5 +1,6 @@
 import os
 import subprocess
+import inspect
 from .tool import Tool
 
 class ListDirectory(Tool):
@@ -20,6 +21,16 @@ class ListDirectory(Tool):
                 }
             }
         }
+
+    def gpt4_prompt_instructions(self):
+        return inspect.cleandoc("""
+            # List Directory Contents (list_directory):
+            Utilize this function to list the contents of a directory. You can specify the directory path, an optional character offset to start the listing, and define a maximum number of characters for the return.
+            ## Parameters:
+            * relative_path: Provide the directory's relative path you wish to inspect, relative to the current directory (./).
+            * start_offset: (Optional) Define the character offset where the listing should start.
+            * max_return: (Optional) Limit the characters in the returned listing.
+        """)
     
     def do_it(self, relative_path, start_offset=0, max_return=-1):
         # Enforce that all paths are within the current directory

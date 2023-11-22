@@ -15,6 +15,19 @@ class Tool:
     def __init__(self, *args, **kwargs):
         # Set the tool name to the subclass name by default underscored
         self.name = kwargs.get('name', underscore(self.__class__.__name__))
+        self.agent = kwargs.get('agent', None)
+
+    def set_name(self, name):
+        """
+        Set the name of the tool.
+        """
+        self.name = name
+
+    def set_agent(self, agent):
+        """
+        Set the agent for the tool.
+        """
+        self.agent = agent
 
     def gpt4_assistants_tool(self):
         """
@@ -22,11 +35,23 @@ class Tool:
         """
         raise NotImplementedError(f"GPT 4 Assitants Tool metadata not implemented. ({__class__.__name__})")
 
+    def gpt4_prompt_instructions(self):
+        """
+        Return the prompt for the tool.
+        """
+        raise NotImplementedError(f"GPT 4 Prompt not implemented. ({__class__.__name__})")
+
     def do_it(self, *args, **kwargs):
         """
         Execute the tool's functionality.
         """
         raise NotImplementedError(f"Tool functionality not implemented. ({__class__.__name__})")
+
+    def set_agent(self, agent):
+        """
+        Set the agent for the tool.
+        """
+        self.agent = agent
 
     def enforce_relative_path(self, relative_path):
         full_path = os.path.abspath(relative_path)
