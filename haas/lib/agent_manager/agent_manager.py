@@ -1,6 +1,6 @@
 import uuid
 import importlib
-from inflection import classify
+from inflection import camelize
 
 from haas.lib.agent_manager.agent_state_machine import AgentStateMachine
 
@@ -24,7 +24,7 @@ class AgentManager(object):
     def init_tool(self, tool_name):
         import_path = f"haas.tools.{tool_name}"
         tool = importlib.import_module(import_path)
-        tool_class = getattr(tool, classify(tool_name))
+        tool_class = getattr(tool, camelize(tool_name))
         return tool_class()
 
 
