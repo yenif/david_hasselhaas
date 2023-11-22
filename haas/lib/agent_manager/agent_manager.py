@@ -32,7 +32,7 @@ class AgentManager(object):
         agent = self.new_agent(agent_definition, prompt_definition, tool_definitions)
         agent_state = AgentStateMachine(agent=agent)
         self.agent_registry[agent_state.name()] = agent_state
-        return agent.id()
+        return agent_state.name()
 
     def get_agent(self, agent_id):
         return self.agent_registry.get(agent_id, None)
