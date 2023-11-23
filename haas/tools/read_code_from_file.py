@@ -27,7 +27,7 @@ class ReadCodeFromFile(Tool):
                             "type": "string", "description": "Relative path to the code file"
                         },
                         "ast_path": {
-                            "type": "string", "description": "AST path referencing the component to read"
+                            "type": "string", "description": "AST path referencing the component to read. See docs/tree-sitter_pattern-matching-with-queries.md for general instructions and docs/tree-sitter_python_node-type.json for python node types."
                         }
                     },
                     "required": ["relative_path", "ast_path"]

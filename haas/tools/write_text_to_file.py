@@ -25,8 +25,11 @@ class WriteTextToFile(Tool):
     def gpt4_prompt_instructions(self):
         return inspect.cleandoc("""
             # Write Text to a File (write_text_to_file):
+
             This tool allows you to write new text to a specified file. You can either add text, insert it at a particular offset, or replace existing text based on provided parameters.
+
             ## Parameters:
+
             * relative_path: Specify the file's relative path where the new text will be written, relative to the current directory (./).
             * new_text: The new content you intend to write into the file.
             * text_to_replace: (Optional) Identifies the text to be replaced with new_text if not left blank. Remember that any text being replaced must be replicated in new_text if you want to keep it.

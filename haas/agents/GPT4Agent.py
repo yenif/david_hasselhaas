@@ -34,7 +34,7 @@ class GPT4Agent(GPTAssistantAgent):
             tool_functions[tool.name] = tool.do_it
             tool_instructions.append(tool.gpt4_prompt_instructions())
         
-        instruction = "\n".join((instructions, *tool_instructions))
+        instructions = "\n\n".join((instructions, *tool_instructions))
 
         super().__init__(
             name=name,
@@ -50,4 +50,4 @@ class GPT4Agent(GPTAssistantAgent):
             GPT4Agent {self.name} initialized with tools: {", ".join([tool.name for tool in tools])}
 
             Instructions:
-            """) + self.instructions)
+            """) + instructions)

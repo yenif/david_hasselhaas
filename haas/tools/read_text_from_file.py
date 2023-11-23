@@ -24,8 +24,11 @@ class ReadTextFromFile(Tool):
     def gpt4_prompt_instructions(self):
         return inspect.cleandoc("""
             # Read Text from a File (read_text_from_file):
+
             You have the capability to read text from files using this function. This includes selecting the file through its relative path and optionally setting a start offset and a maximum number of characters to return.
+
             ## Parameters:
+
             * relative_path: Indicate the file's relative path from which you wish to read, relative to the current directory (./).
             * start_offset: (Optional) Start reading from a specific character offset.
             * max_return: (Optional) Designate the maximum number of characters to be read from the file.
