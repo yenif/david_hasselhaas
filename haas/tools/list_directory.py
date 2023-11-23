@@ -24,11 +24,11 @@ class ListDirectory(Tool):
 
     def gpt4_prompt_instructions(self):
         return inspect.cleandoc("""
-            # List Directory Contents (list_directory):
+            ## List Directory Contents (list_directory):
 
             Utilize this function to list the contents of a directory. You can specify the directory path, an optional character offset to start the listing, and define a maximum number of characters for the return.
 
-            ## Parameters:
+            ### Parameters:
 
             * relative_path: Provide the directory's relative path you wish to inspect, relative to the current directory (./).
             * start_offset: (Optional) Define the character offset where the listing should start.

@@ -5,7 +5,7 @@ from haas.lib.agent_manager.agent_manager import AgentManager
 
 logger = logging.getLogger(__name__)
 
-class GPT4Agent(GPTAssistantAgent):
+class Gpt4Agent(GPTAssistantAgent):
     """Autonomous Swarm Agent Builder (SAB) Agent"""
 
     DEFAULT_LLM_CONFIG = dict(

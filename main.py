@@ -1,7 +1,7 @@
 import logging
 from autogen import UserProxyAgent
 
-from haas.agents.GPT4Agent import GPT4Agent
+from haas.agents.gpt4_agent import Gpt4Agent
 from haas.tools.list_directory import ListDirectory
 from haas.tools.read_text_from_file import ReadTextFromFile
 from haas.tools.write_text_to_file import WriteTextToFile

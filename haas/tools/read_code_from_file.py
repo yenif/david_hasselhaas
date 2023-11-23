@@ -37,19 +37,19 @@ class ReadCodeFromFile(Tool):
 
     def gpt4_prompt_instructions(self):
         return inspect.cleandoc("""
-            # Read Code File Tool (read_code_from_file):
+            ## Read Code File Tool (read_code_from_file):
 
             This tool uses Tree-sitter, a parser generator tool and an incremental parsing library, to read and return text from a code file based on an AST (Abstract Syntax Tree) path.
 
             An AST path is a query language used by Tree-sitter to identify and locate specific code constructs within the source file's parsed tree structure. 
 
-            ## How to Construct an AST Path:
+            ### How to Construct an AST Path:
 
             1. Identify the language of the source code file you will be querying.
             2. Refer to the language's Tree-sitter grammar documentation for the syntax and node types defined within it.
             3. Construct the AST path using the syntax constructs provided by Tree-sitter, targeting the code section of interest.
 
-            ## Examples of Valid AST Paths:
+            ### Examples of Valid AST Paths:
 
             ```plaintext
             # Python Function Definition AST Path:
@@ -84,7 +84,7 @@ class ReadCodeFromFile(Tool):
 
             ### Additional Resources:
 
-            For detailed Tree-sitter query syntax for supported languages, please refer to [Tree-sitter documentation](https://tree-sitter.github.io/tree-sitter/using-parsers#pattern-matching-with-queries).
+            For detailed Tree-sitter query syntax for supported languages, please refer to [Tree-sitter documentation](https://tree-sitter.github.io/tree-sitter/using-parsers#pattern-matching-with-queries). Cached copies of the documentation for supported languages are available in the `docs` directory of this repository.
 
             By following these instructions and utilizing appropriate examples and resources, users can construct effective AST path queries tailored to their specific needs when working with the `read_code_from_file` tool.
         """)

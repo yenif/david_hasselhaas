@@ -18,7 +18,7 @@ class ListAgents(Tool):
 
     def gpt4_prompt_instructions(self):
         return inspect.cleandoc("""
-            # List Agents (list_agents):
+            ## List Agents (list_agents):
 
             Utilize this function to list the agents in the calling agent's agent_manager along with their current state.
         """)
