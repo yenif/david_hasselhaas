@@ -14,7 +14,7 @@ class WriteTextToFile(Tool):
                     "properties": {
                         "relative_path": {"type": "string", "description": "Relative path to the file to write"},
                         "new_text": {"type": "string", "description": "New text to insert in to the file"},
-                        "text_to_replace": {"type": "string", "description": "If present, the first instance of text_to_replace after start_offset will be replaced with new_text"},
+                        "text_to_replace": {"type": "string", "description": "If present, the first instance of text_to_replace after start_offset will be replaced with new_text. Remember that any text being replaced must be replicated in new_text if you want to keep it."},
                         "start_offset": {"type": "string", "description": "Start character offset for the write, defaults to 0, negative start_offset indexes from the end of the file"}
                     },
                     "required": ["relative_path", "new_text"]
@@ -29,7 +29,7 @@ class WriteTextToFile(Tool):
             ## Parameters:
             * relative_path: Specify the file's relative path where the new text will be written, relative to the current directory (./).
             * new_text: The new content you intend to write into the file.
-            * text_to_replace: (Optional) Identifies the text to be replaced with new_text if not left blank.
+            * text_to_replace: (Optional) Identifies the text to be replaced with new_text if not left blank. Remember that any text being replaced must be replicated in new_text if you want to keep it.
             * start_offset: (Optional) Choose the positional character offset for the new text. Default is zero and negative values count from the end of the file.
         """)
 

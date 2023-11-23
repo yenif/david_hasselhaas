@@ -37,27 +37,56 @@ class ReadCodeFromFile(Tool):
 
     def gpt4_prompt_instructions(self):
         return inspect.cleandoc("""
-            # Read From Code File (read_from_code_file):
-            This tool uses Tree-sitter to read and return the text of a specific code component based on an AST path. It requires information on where the file is located and what portion of the code to extract.
+            # Read Code File Tool (read_code_from_file):
 
-            ## How to use this tool:
-            Specify the relative path to the source code file and the AST path referencing the component to read. The tool will determine the file type, use the appropriate Tree-sitter grammar, and return the text of the code at or matching the AST path.
+            This tool uses Tree-sitter, a parser generator tool and an incremental parsing library, to read and return text from a code file based on an AST (Abstract Syntax Tree) path.
 
-            ## Parameters:
-            - relative_path: The path to the code file from which you want to read, relative to the current working directory.
-            - ast_path: A string that represents the AST path to query. This path should conform to the syntax of Tree-sitter queries and will be used to locate the code component to read.
+            An AST path is a query language used by Tree-sitter to identify and locate specific code constructs within the source file's parsed tree structure. 
 
-            ## Example:
-            If you want to read the function named 'main' from a Python file 'example.py', specify the relative path as 'example.py' and an AST path that finds the function definition named 'main'.
+            ## How to Construct an AST Path:
 
-            ## AST Path Example for Python:
+            1. Identify the language of the source code file you will be querying.
+            2. Refer to the language's Tree-sitter grammar documentation for the syntax and node types defined within it.
+            3. Construct the AST path using the syntax constructs provided by Tree-sitter, targeting the code section of interest.
+
+            ## Examples of Valid AST Paths:
+
+            ```plaintext
+            # Python Function Definition AST Path:
             (function_definition
             name: (identifier) @function
-            (#eq? @function "main")
-            )
+            (#eq @function "function_name")
+            ) @function
 
-            # Note:
-            Ensure that the AST path is correctly formatted for the language of the code file and is specific enough to match only the intended part of the code.
+            # JavaScript Method Definition in a Class AST Path:
+            (method_definition
+            name: (property_identifier) @method
+            (#eq @method "methodName")
+            ) @function-body
+            ```
+
+            ### Example:
+
+            To read the 'main' function from a file named `example.py`, provide these arguments to the tool:
+
+            Relative Path: "example.py"
+            AST Path: 
+            ```plaintext
+            (function_definition
+            name: (identifier) @function
+            (#eq @function "main")
+            ) @function
+            ```
+
+            ### Note on Query Specificity:
+
+            Ensure that the AST path is specific enough to match only the intended part of the code. Ambiguities in the query might lead to multiple matches or incorrect excerpts being returned.
+
+            ### Additional Resources:
+
+            For detailed Tree-sitter query syntax for supported languages, please refer to [Tree-sitter documentation](https://tree-sitter.github.io/tree-sitter/using-parsers#pattern-matching-with-queries).
+
+            By following these instructions and utilizing appropriate examples and resources, users can construct effective AST path queries tailored to their specific needs when working with the `read_code_from_file` tool.
         """)
 
     def do_it(self, relative_path, ast_path):
@@ -88,7 +117,7 @@ class ReadCodeFromFile(Tool):
 
         # Use the query captures to extract text from the code
         result = []
-        for _, node in captures:
+        for node, _type in captures:
             start = node.start_byte
             end = node.end_byte
             result.append(code[start:end].decode('utf8'))
