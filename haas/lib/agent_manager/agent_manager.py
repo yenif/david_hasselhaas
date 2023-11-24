@@ -9,7 +9,7 @@ class AgentManager(object):
         self.agent_registry = {}
 
     def list_agents(self):
-        return [{"name": agent_name, "state": agent.state} for agent_name, agent in self.agent_registry.items()]
+        return [{"name": agent_name, "state": agent.state, "received_messages": agent.message_count} for agent_name, agent in self.agent_registry.items()]
 
     def new_agent(self, name, agent_definition, prompt_definition, tool_definitions):
         return agent_definition(
@@ -27,13 +27,14 @@ class AgentManager(object):
     def get_agent(self, agent_id):
         return self.agent_registry.get(agent_id, None)
 
-    def transition_state(self, agent_id, transition, *args, **kwargs):
+    def send_to_agent(self, agent_id, message):
         agent = self.get_agent(agent_id)
         if not agent:
-            return f"Agent with ID {agent_id} not found."
-        try:
-            trigger = getattr(agent, transition)
-            trigger(*args, **kwargs)
-            return f"Transition {transition} triggered for agent {agent_id}."
-        except AttributeError:
-            return f"Invalid transition {transition} for agent {agent_id}."
+            raise ValueError(f'Agent with id {agent_id} not found.')
+        agent.send_message(message)
+
+    def receive_from_agent(self, agent_id):
+        agent = self.get_agent(agent_id)
+        if not agent:
+            raise ValueError(f'Agent with id {agent_id} not found.')
+        return agent.get_all_messages()

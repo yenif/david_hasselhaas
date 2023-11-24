@@ -15,9 +15,10 @@ class CreateAgent(Tool):
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "agent_definition": {"type": "object", "description": "Definition of the new agent to be created"},
+                        "name": {"type": "string", "description": "Name of the new agent to create."},
+                        "agent_definition": {"type": "string", "description": "Reference to an existing agent definition"},
                         "prompt_definition": {"type": "string", "description": "Reference to an existing prompt definition"},
-                        "tool_definitions": {"type": "array", "description": "List of references to existing tool definitions"},
+                        "tool_definitions": {"type": "array", "description": "List of references to existing tool definitions", "items": {"type": "string"}},
                     },
                     "required": ["agent_definition", "prompt_definition", "tool_definitions"]
                 }
@@ -32,6 +33,24 @@ class CreateAgent(Tool):
             Provide the necessary information for the agent_definition, prompt_definition, and tool_definitions.
 
             The tool ensures that only valid definitions are used when creating a new agent.
+
+            ### Parameters:
+
+            * name: Provide the name of the new agent to create.
+            * agent_definition: Provide the reference to an existing agent definition.
+            * prompt_definition: Provide the reference to an existing prompt definition.
+            * tool_definitions: Provide the references to existing tool definitions.
+
+            ### Example:
+
+            ```psuedocode
+                create_agent(
+                    name="my_new_readonly_agent",
+                    agent_definition="gpt4_agent",
+                    prompt_definition="autonomous_swarm_agent_builder.md",
+                    tool_definitions=["list_directory", "read_text_from_file"]
+                )
+            ```
         """)
 
     def do_it(self, name, agent_definition, prompt_definition, tool_definitions):
