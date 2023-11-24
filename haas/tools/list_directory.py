@@ -34,7 +34,7 @@ class ListDirectory(Tool):
             * start_offset: (Optional) Define the character offset where the listing should start.
             * max_return: (Optional) Limit the characters in the returned listing.
         """)
-    
+
     def do_it(self, relative_path, start_offset=0, max_return=-1):
         # Enforce that all paths are within the current directory
         full_path = self.enforce_relative_path(relative_path)
