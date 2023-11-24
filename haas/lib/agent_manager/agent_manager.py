@@ -11,7 +11,7 @@ class AgentManager(object):
 
     def list_agents(self):
         return [
-            {"name": agent_name, "state": agent.state, "received_messages": agent.message_count()}
+            {"name": agent_name, "state": agent.state, "received_replies": agent.message_count()}
             for agent_name, agent in self.agent_registry.items()
         ]
 
@@ -31,11 +31,11 @@ class AgentManager(object):
     def get_agent(self, agent_id):
         return self.agent_registry.get(agent_id, None)
 
-    def send_to_agent(self, agent_id, message):
+    def send_to_agent(self, agent_id, message, request_reply=True, silent=False):
         agent = self.get_agent(agent_id)
         if not agent:
             raise ValueError(f'Agent with id {agent_id} not found.')
-        agent.send(message)
+        agent.send(message, request_reply, silent)
 
     def receive_from_agent(self, agent_id):
         agent = self.get_agent(agent_id)

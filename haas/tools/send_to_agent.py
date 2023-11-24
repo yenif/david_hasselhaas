@@ -21,15 +21,13 @@ class SendToAgent(Tool):
 
     def gpt4_prompt_instructions(self):
         return (
-            "# Send To Agent (send_to_agent):\n" +
-            "Send a message to a specified agent. " +
-            "You need to provide the agent_name and the message you want to send." +
-            "Optionally, you can specify request_reply to expect a reply, " +
-            "and silent to send without notifying the sender agent."
+            "## Send To Agent (send_to_agent):\n" +
+            "Send a message to a specified agent. You need to provide the agent_name and the message you want to send.\n" +
+            "Optionally, you can specify request_reply to expect a reply, and silent to send without notifying the sender agent.\n"
         )
 
-    def do_it(self, agent_name, message):
+    def do_it(self, agent_name: str, message: str, request_reply: Optional[bool] = True, silent: Optional[bool] = False):
         if not self.agent or not hasattr(self.agent, 'agent_manager'):
             raise ValueError('Agent manager not found')
 
-        self.agent.agent_manager.send_to_agent(agent_name, message)
+        return self.agent.agent_manager.send_to_agent(agent_name, message, request_reply, silent)

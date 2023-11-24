@@ -20,9 +20,9 @@ class ListAgents(Tool):
         return inspect.cleandoc("""
             ## List Agents (list_agents):
 
-            Utilize this function to list the agents in the calling agent's agent_manager along with their current state.
+            Utilize this function to list the agents in the calling agent's agent_manager along with their current state. Use read_from_agent to read the message replies received from a particular agent.
         """)
-    
+
     def do_it(self):
         # Assuming the agent manager is accessible via self.agent.agent_manager
         if not self.agent or not hasattr(self.agent, 'agent_manager'):

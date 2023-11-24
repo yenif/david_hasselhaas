@@ -41,7 +41,7 @@ class AgentStateMachine(object):
 
     def send_message(self, message: Union[Dict, str], request_reply: Optional[bool] = True, silent: Optional[bool] = False):
         """Send message to the agent."""
-        self.agent.receive(message, self, request_reply, silent)
+        self.proxy.send(message, self.agent, request_reply, silent)
 
     def receive_message(
         self, messages: List[Union[Dict, str]],
