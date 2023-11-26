@@ -4,11 +4,11 @@
 
 The Hierarchical Autonomous Agent Swarm (HAAS) is a groundbreaking initiative that leverages OpenAI's latest advancements in agent-based APIs to create a self-organizing and ethically governed ecosystem of AI agents. Drawing inspiration from the ACE Framework, HAAS introduces a novel approach to AI governance and operation, where a hierarchy of specialized agents, each with distinct roles and capabilities, collaborate to solve complex problems and perform a wide array of tasks.
 
-The HAAS is designed to be a self-expanding system where a core set of agents, governed by a Supreme Oversight Board (SOB), can design, provision, and manage an arbitrary number of sub-agents tailored to specific needs. This document serves as a comprehensive guide to the theoretical underpinnings, architectural design, and operational principles of the HAAS.
+The HAAS is designed to be a self-expanding system where a core set of agents, governed by a Supreme Oversight Board (SOB), can design, provision, and manage an arbitrary number of sub-agents tailored to specific needs. This document serves as a comprehensive guide to the theoretical underpinnings, architectural design, operational principles, and the security architecture of the HAAS.
 
 ## Theoretical Foundation
 
-The AAHS is predicated on the notion that autonomous agents require a robust ethical and operational framework to make decisions that align with human values and organizational goals. This is rooted in the understanding that AI, much like humans, cannot operate effectively without a set of guiding principles or a moral compass. The HAAS addresses this by establishing a multi-tiered system where each layer of agents operates within a defined ethical and functional scope, ensuring decisions are made with consideration to morality, ethics, and utility.
+The HAAS is predicated on the notion that autonomous agents require a robust ethical and operational framework to make decisions that align with human values and organizational goals. This is rooted in the understanding that AI, much like humans, cannot operate effectively without a set of guiding principles or a moral compass. The HAAS addresses this by establishing a multi-tiered system where each layer of agents operates within a defined ethical and functional scope, ensuring decisions are made with consideration to morality, ethics, and utility.
 
 ## System Architecture
 
@@ -35,15 +35,15 @@ Sub-Agents are specialized agents created by the SOB or Executive Agents to perf
 
 ## Agent Configuration
 
-Each agent in the HAAS is defined by the following parameters:
+Each agent in the HAAS is defined by the following components:
 
-### Functions
+### Tools
 
-Agents are equipped with a set of functions that enable them to perform their designated roles. These functions include API interactions, internal process management, and the ability to spawn additional agents if required.
+Tools are core functionalities that agents use to perform actions and operations within their domain. These base Tools have mostly unrestricted access and are key to the agent's capabilities.
 
-### Files
+### Filters
 
-Agents have access to a selection of files that serve as their knowledge base, providing them with the information necessary to carry out their tasks effectively.
+Filters are wrappers around Tools that audit, restrict, or augment the function of these Tools. They can be used to implement access controls, operational constraints, or other restrictions as required. Filters enable a flexible and dynamic security model that pairs well with the hierarchical nature of HAAS.
 
 ### Instructions
 
@@ -57,7 +57,33 @@ Interactions with agents are structured in a conversational format, with user in
 
 Each agent operates under the supervision of the SOB or designated Executive Agents, ensuring adherence to the system's overarching mission and principles.
 
-## Controlling Agents
+## Security Architecture
+
+### Controlling Agents with Tools and Filters
+
+Agent interactions within the HAAS are governed by access to a suite of Tools providing base functionality, and Filters that augment or restrict how these tools are used. For example:
+
+- A `RestrictToDirectory` Filter could wrap any filesystem access Tool to ensure that any path operation is confined to a subpath of a specified directory.
+
+- Agents have access to a particular list of instantiated Tools, which may already have existing Filters applied to them.
+
+- When an agent instantiates another agent, it can pass on any of the Tools it possesses. It can wrap individual Tools with Filters as desired to augment the new agent's use of the Tool.
+
+- An agent should only be able to provide another agent access to a Tool as they have access to it, with the potential addition of more restrictive Filters.
+
+This design encourages a modular approach where base functionality is encapsulated in Tools, and Filters provide the means to control access and functionality in a granular and secure manner.
+
+### Hierarchical and Role-Based Privileges
+
+Privileges in the HAAS are managed through a combination of hierarchical positions and role-based permissions. This structure enables agents to maintain a controlled and transparent system of access throughout the swarm. Each agent inherits privileges from its creator and is limited to the operations and actions defined by those privileges.
+
+### Handling Instantiation and Termination
+
+Instantiation and termination of agents are key controls that facilitate the expansion and contraction of the agent network. All agents can instantiate sub-agents, and all agents have the ability to terminate or remove agents within their lineage. These capabilities ensure that agents are only created or terminated within the bounds of the system's rules and ethical standards.
+
+## Conclusion
+
+The HAAS is a forward-thinking approach to AI agent governance and operation. By combining a hierarchical structure with a flexible security model using Tools and Filters, the HAAS is poised to be a powerful and adaptive system capable of taking on complex challenges while upholding the principles of ethical AI.
 
 The Hierarchical Autonomous Agent Swarm (HAAS) operates on a sophisticated control mechanism that governs the instantiation, management, and termination of agents within the system. This control mechanism is designed to maintain order, security, and alignment with the overarching goals and ethical framework of the HAAS.
 
