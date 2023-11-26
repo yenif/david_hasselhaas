@@ -8,6 +8,19 @@ class RestrictPathToDir(Filter):
         super().__init__(tool)
         self.restricted_directory = os.path.abspath(restricted_directory)
 
+        # Get list of argument names for the tool's do_it
+        arg_names = [param.name for param in inspect.signature(self.tool.do_it).parameters.values()]
+
+        # Determine the key used for the path argument
+        path_keys = set(arg_names) & set(['path', 'relative_path'])
+        try:
+            self.path_key = path_keys.pop()
+        except KeyError as e:
+            raise ValueError(f"Tool {self.tool.name} does not have a path argument.") from e
+
+        # Determine the index of the path argument
+        self.path_index = arg_names.index(path_key)
+
     def _convert_to_absolute(self, path):
         # Convert a relative path to absolute path relative to 'restricted_directory'.
         # If it's already absolute, verify it is a subpath of 'restricted_directory'.
@@ -17,23 +30,11 @@ class RestrictPathToDir(Filter):
         return abs_path
 
     def do_it(self, *args, **kwargs):
-        # Get list of argument names for the tool's do_it
-        arg_names = [param.name for param in inspect.signature(self.tool.do_it).parameters.values()]
-
-        # Determine the key used for the path argument, if any
-        path_keys = set(arg_names) & set(['path', 'relative_path'])
-        try:
-            path_key = path_keys.pop()
-        except KeyError as e:
-            raise ValueError(f"Tool {self.tool.name} does not have a path argument.") from e
-
-        # Update the path in kwargs
-        if path_key in kwargs:
-            kwargs[path_key] = self._convert_to_absolute(kwargs[path_key])
+        if self.path_key in kwargs:
+            kwargs[self.path_key] = self._convert_to_absolute(kwargs[self.path_key])
         else:
-            path_index = arg_names.index(path_key)
             args = list(args)
-            args[path_index] = self._convert_to_absolute(args[path_index])
+            args[self.path_index] = self._convert_to_absolute(args[self.path_index])
             args = tuple(args)
 
         # Call the original method with possibly modified arguments
