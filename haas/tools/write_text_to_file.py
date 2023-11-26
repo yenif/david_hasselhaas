@@ -39,9 +39,6 @@ class WriteTextToFile(Tool):
         """)
 
     def do_it(self, relative_path, new_text, text_to_replace=None, start_offset=0):
-        # Enforce that all paths are within the current directory
-        full_path = self.enforce_relative_path(relative_path)
-
         # Create path if it doesn't exist
         if not os.path.exists(relative_path):
             os.makedirs(os.path.dirname(relative_path), exist_ok=True)

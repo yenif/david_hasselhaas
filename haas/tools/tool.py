@@ -52,9 +52,3 @@ class Tool:
         Set the agent for the tool.
         """
         self.agent = agent
-
-    def enforce_relative_path(self, relative_path):
-        full_path = os.path.abspath(relative_path)
-        if not full_path.startswith(os.getcwd()):
-            raise ValueError(f"Access to the path outside the current directory is not allowed. ({relative_path})")
-        return full_path

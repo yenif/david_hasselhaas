@@ -16,7 +16,7 @@ class ReadTextFromFile(Tool):
                         "start_offset": {"type": "string", "description": "Start character offset for the read"},
                         "max_return": {"type": "string", "description": "Maximum number of characters to return"},
                     },
-                    "required": ["path"]
+                    "required": ["relative_path"]
                 }
             }
         }
@@ -35,9 +35,6 @@ class ReadTextFromFile(Tool):
         """)
 
     def do_it(self, relative_path, start_offset=0, max_return=-1):
-        # Enforce that all paths are within the current directory
-        full_path = self.enforce_relative_path(relative_path)
-
         # Check if the path is a file
         if not os.path.isfile(relative_path):
             raise ValueError(f"The path {relative_path} is not a file.")

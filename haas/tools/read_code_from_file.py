@@ -90,14 +90,12 @@ class ReadCodeFromFile(Tool):
         """)
 
     def do_it(self, relative_path, ast_path):
-        full_path = self.enforce_relative_path(relative_path)
-
         # Ensure the file exists
         if not os.path.isfile(full_path):
             raise ValueError(f"The path {relative_path} is not a valid file.")
 
         # Determine the file type and select the correct language for tree-sitter
-        file_extension = os.path.splitext(full_path)[1]
+        file_extension = os.path.splitext(relative_path)[1]
         if file_extension not in self.LANGUAGES:
             raise ValueError(f"Unsupported file type: {file_extension}")
         language_name = self.LANGUAGES[file_extension]
@@ -107,7 +105,7 @@ class ReadCodeFromFile(Tool):
         parser = get_parser(language_name)
 
         # Read the file and parse it
-        with open(full_path, 'rb') as file:
+        with open(relative_path, 'rb') as file:
             code = file.read()
         tree = parser.parse(code)
 
