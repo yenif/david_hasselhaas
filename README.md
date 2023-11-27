@@ -1,4 +1,6 @@
-# Project: Hierarchical Autonomous Agent Swarm
+# Project: David HasselHAAS - The HAAS - Hierarchical Autonomous Agent Swarm
+
+Based on https://github.com/daveshap/OpenAI_Agent_Swarm
 
 ## Overview
 
