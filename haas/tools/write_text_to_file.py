@@ -45,7 +45,7 @@ class WriteTextToFile(Tool):
             ```python
             write_text_to_file(
                 relative_path="example.txt",
-                new_text="Prepended text\n"
+                new_text="Prepended text\\n"
             )
             ```
 
@@ -53,35 +53,39 @@ class WriteTextToFile(Tool):
             ```python
             write_text_to_file(
                 relative_path="example.txt",
-                new_text="Appended text\n",
+                new_text="Appended text\\n",
                 start_offset=-1,
                 append=True
             )
             ```
         ''')
 
-    def do_it(self, relative_path, new_text, text_to_replace=None, start_offset=0, append=False):
+    def do_it(self, relative_path:str, new_text:str, text_to_replace:str="", start_offset:int=0, append:bool=False):
         # Create path if it doesn't exist
         if not os.path.exists(os.path.dirname(relative_path)):
             os.makedirs(os.path.dirname(relative_path), exist_ok=True)
 
-        # Open file with read & write permissions
-        with open(relative_path, 'r+', encoding='utf-8') as file:
+        # Open file with read & write permissions, create the file if it doesn't exist
+        with open(relative_path, 'a+', encoding='utf-8') as file:
+            file.seek(0)
             content = file.read()
+
+            if start_offset is str:
+                start_offset = int(start_offset)
 
             # Adjust the start_offset if it's negative
             if start_offset < 0:
                 start_offset += len(content)
 
             # Determine where to insert new_text
-            if append and text_to_replace in [None, ""]:
+            if append and text_to_replace == "":
                 start_offset += 1  # Move to the character after the current index
 
             # Replace the specified text if any
-            if text_to_replace in [None, ""]:
+            if text_to_replace == "":
                 content = content[:start_offset] + new_text + content[start_offset:]
             else:
-                content = content[:start_offset] + content[start_offset:].replace(text_to_replace, new_text, 1)  # Replace the first instance of text_to_replace
+                content = content[:start_offset] + content[start_offset:].replace(text_to_replace, new_text, 1)  # Replace the first instance of text_to_replace # type: ignore
 
             file.seek(0)
             file.truncate()

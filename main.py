@@ -54,7 +54,7 @@ logging.basicConfig(level=logging.INFO)
 
 # Initialize the Gpt4Agent with name, instructions, and tools
 sab_agent = Gpt4Agent(
-    name='Autonomous Swarm Agent Builder (SAB) Agent',
+    name='David HasselHAAS',
     instructions=open('haas/prompts/autonomous_swarm_agent_builder.md').read(),
     tools=[
         list_dir_tool,

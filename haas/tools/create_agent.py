@@ -37,18 +37,18 @@ class CreateAgent(Tool):
             ### Parameters:
 
             * name: Provide the name of the new agent to create.
-            * agent_definition: Provide the reference to an existing agent definition.
-            * prompt_definition: Provide the reference to an existing prompt definition.
-            * tool_definitions: Provide the references to existing tool definitions.
+            * agent_definition: Provide the reference to an existing agent definition. This is a module from `haas.agents.`.
+            * prompt_definition: Provide the reference to an existing prompt definition. This is a filename from "./haas/prompts/".
+            * tool_definitions: Provide the references to existing tool definitions. This is a list of tool names from the list of tools you have access to.
 
             ### Example:
 
             ```psuedocode
                 create_agent(
-                    name="my_new_readonly_agent",
+                    name="bob_the_developer",
                     agent_definition="gpt4_agent",
-                    prompt_definition="autonomous_swarm_agent_builder.md",
-                    tool_definitions=["list_directory", "read_text_from_file"]
+                    prompt_definition="developer_agent_instructions.md",
+                    tool_definitions=["list_directory", "read_text_from_file", "write_whole_text_file", "run_python_test"]
                 )
             ```
         """)
@@ -65,12 +65,11 @@ class CreateAgent(Tool):
         with open(f'./haas/prompts/{prompt_definition}', 'r') as prompt_file:
             prompt_contents = prompt_file.read()
 
-        # Initialize the tools for the new agent
+        # Get the tools for the new agent
         tools = []
         for tool_name in tool_definitions:
-            tool_module = importlib.import_module(f"haas.tools.{tool_name}")
-            tool_class = getattr(tool_module, camelize(tool_name))
-            tools.append(tool_class())
+            tools.append(self.agent.tools[tool_name])
+            # TODO: figure out how add additional filters to a tool to restrict sub agent access
 
         # Create the new agent with the agent's agent_manager
         agent_manager = self.agent.agent_manager

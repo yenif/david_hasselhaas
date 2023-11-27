@@ -23,16 +23,18 @@ class Gpt4Agent(GPTAssistantAgent):
                  ):
 
         self.llm_config = self.DEFAULT_LLM_CONFIG.copy()
-        self.llm_config.setdefault("tools", []).extend([tool.gpt4_assistants_tool() for tool in tools]) # type: ignore
         self.instructions = instructions
-        self.tools = self.llm_config["tools"]
 
-        tool_functions = dict()
-        tool_instructions = []
+        self.tools = dict()
+        self.tool_functions = tool_functions = dict()
+        self.tool_instructions = tool_instructions = []
+        self.llm_config.setdefault("tools", [])
         for tool in tools:
             tool.set_agent(self)
+            self.tools[tool.name] = tool
             tool_functions[tool.name] = tool.do_it
             tool_instructions.append(inspect.cleandoc(tool.gpt4_prompt_instructions()))
+            self.llm_config["tools"].append(tool.gpt4_assistants_tool()) # type: ignore
 
         instructions = "\n\n".join((instructions, *tool_instructions))
 
