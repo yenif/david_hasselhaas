@@ -41,7 +41,7 @@ class ReadCodeFromFile(Tool):
 
             This tool uses Tree-sitter, a parser generator tool and an incremental parsing library, to read and return text from a code file based on an AST (Abstract Syntax Tree) path.
 
-            An AST path is a query language used by Tree-sitter to identify and locate specific code constructs within the source file's parsed tree structure. 
+            An AST path is a query language used by Tree-sitter to identify and locate specific code constructs within the source file's parsed tree structure.
 
             ### How to Construct an AST Path:
 
@@ -70,7 +70,7 @@ class ReadCodeFromFile(Tool):
             To read the 'main' function from a file named `example.py`, provide these arguments to the tool:
 
             Relative Path: "example.py"
-            AST Path: 
+            AST Path:
             ```plaintext
             (function_definition
             name: (identifier) @function
@@ -91,7 +91,7 @@ class ReadCodeFromFile(Tool):
 
     def do_it(self, relative_path, ast_path):
         # Ensure the file exists
-        if not os.path.isfile(full_path):
+        if not os.path.isfile(relative_path):
             raise ValueError(f"The path {relative_path} is not a valid file.")
 
         # Determine the file type and select the correct language for tree-sitter

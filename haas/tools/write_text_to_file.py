@@ -13,9 +13,10 @@ class WriteTextToFile(Tool):
                     "type": "object",
                     "properties": {
                         "relative_path": {"type": "string", "description": "Relative path to the file to write"},
-                        "new_text": {"type": "string", "description": "New text to insert in to the file"},
-                        "text_to_replace": {"type": "string", "description": 'If present, the first instance of text_to_replace after start_offset will be replaced with new_text, remember that any text being replaced must be replicated in new_text if you want to keep it. If text_to_replace is "", then new_text will be inserted at start_offset. If text_to_replace is None, then file will be truncated to start_offset and new_text will be appended to the file.'},
-                        "start_offset": {"type": "string", "description": "Start character offset for the write, defaults to 0, negative start_offset indexes from the end of the file"}
+                        "new_text": {"type": "string", "description": "New text to insert into the file"},
+                        "text_to_replace": {"type": "string", "description": "If present, the first instance of text_to_replace after start_offset will be replaced with new_text, remember that any text being replaced must be replicated in new_text if you want to keep it. If text_to_replace is '', then new_text will be inserted at start_offset. If text_to_replace is None, then file will be truncated to start_offset and new_text will be appended to the file."},
+                        "start_offset": {"type": "string", "description": "Start character offset for the write, defaults to 0, negative start_offset indexes from the end of the file"},
+                        "append": {"type": "boolean", "description": "If true and text_to_replace is an empty string, new_text will be inserted after the character at the position of start_offset."}
                     },
                     "required": ["relative_path", "new_text"]
                 }
@@ -32,34 +33,45 @@ class WriteTextToFile(Tool):
 
             * relative_path: Specify the file's relative path where the new text will be written, relative to the current directory (./).
             * new_text: The new content you intend to write into the file.
-            * text_to_replace: (Optional) Use text_to_replace to control the editting mode of writing to a file. Blank str inserts at start_offset, None truncates and appends at start_offset, and a str gives explicit text to replace. Remember that any text being replaced must be replicated in new_text if you want to keep it.
-            * start_offset: (Optional) Choose the positional character offset for the new text. Default is zero and negative values count from the end of the file.
+            * text_to_replace: (Optional) Use text_to_replace to control the editing mode of writing to a file. None or "" string inserts new_text at start_offset, where as a string provides explicit text to replace. Remember that any text being replaced must be replicated in new_text if you want to keep it.
+            * start_offset: (Optional) Choose the positional character offset for the new text. Default is zero and negative values count from the end of the file. For example, a start_offset of -1 will insert new_text just before the last character of the file.
+            * append: (Optional) If true and text_to_replace is an empty string, new_text will be inserted after the character at the position of start_offset (+=1).
 
-            Thus, by default, if you provide a relative_path and new_text, the file will be truncated to 0 and new text will be inserted as the new content of the file.
+            ### Example:
+
+            To append text to the end of the file, you can set start_offset to the file's length minus one and set append to true. For example:
+            ```python
+            write_text_to_file(
+                relative_path="example.txt",
+                new_text="Appended text",
+                start_offset=-1,
+                append=True
+            )
+            ```
         """)
 
-    def do_it(self, relative_path, new_text, text_to_replace=None, start_offset=0):
+    def do_it(self, relative_path, new_text, text_to_replace=None, start_offset=0, append=False):
         # Create path if it doesn't exist
-        if not os.path.exists(relative_path):
+        if not os.path.exists(os.path.dirname(relative_path)):
             os.makedirs(os.path.dirname(relative_path), exist_ok=True)
-            open(relative_path, 'w').close()
 
-        # Check if the path is a file
-        if not os.path.isfile(relative_path):
-            raise ValueError(f"The path {relative_path} is not a file.")
-
-        with open(relative_path, 'r+t', encoding='utf-8') as file:
+        # Open file with read & write permissions
+        with open(relative_path, 'r+', encoding='utf-8') as file:
             content = file.read()
+
+            # Adjust the start_offset if it's negative
             if start_offset < 0:
-                start_offset += len(content)  # Negative indexing from the end
+                start_offset += len(content)
+
+            # Determine where to insert new_text
+            if append and text_to_replace in [None, ""]:
+                start_offset += 1  # Move to the character after the current index
 
             # Replace the specified text if any
-            if text_to_replace == None:
-                content = content[:start_offset] + new_text
-            elif text_to_replace == "":
+            if text_to_replace in [None, ""]:
                 content = content[:start_offset] + new_text + content[start_offset:]
             else:
-                content = content[:start_offset] + content[start_offset:].replace(text_to_replace, new_text)
+                content = content[:start_offset] + content[start_offset:].replace(text_to_replace, new_text, 1)  # Replace the first instance of text_to_replace
 
             file.seek(0)
             file.truncate()
