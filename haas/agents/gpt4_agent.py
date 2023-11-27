@@ -50,4 +50,4 @@ class Gpt4Agent(GPTAssistantAgent):
             GPT4Agent {self.name} initialized with tools: {", ".join([tool.name for tool in tools])}
 
             Instructions:
-            """) + instructions)
+            """) + f"\n{instructions}")
