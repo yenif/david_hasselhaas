@@ -29,6 +29,8 @@ class WriteTextToFile(Tool):
 
             This tool allows you to write new text to a specified file. You can either add text, insert it at a particular offset, or replace existing text based on provided parameters.
 
+            This tool is more complex than simply overwriting the whole file. You should generally use write_whole_text_file instead. However this tool is useful for prepend, append, and replace operations, especially on larger files or logs. Make sure to work step by step to read the part of the file you are modifying before and after editing to ensure the edit is applied correctly!
+
             ### Parameters:
 
             * relative_path: Specify the file's relative path where the new text will be written, relative to the current directory (./).
@@ -43,7 +45,7 @@ class WriteTextToFile(Tool):
             ```python
             write_text_to_file(
                 relative_path="example.txt",
-                new_text="Appended text",
+                new_text="Appended text\n",
                 start_offset=-1,
                 append=True
             )

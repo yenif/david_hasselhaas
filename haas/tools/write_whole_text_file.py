@@ -36,8 +36,6 @@ class WriteWholeTextFile(Tool):
         # Check if the path exists and is a file
         if not os.path.exists(relative_path):
             os.makedirs(os.path.dirname(relative_path), exist_ok=True)
-        if not os.path.isfile(relative_path):
-            raise ValueError(f"The path {relative_path} does not lead to a file.")
 
         # Write new_text to the file, replacing all existing content
         with open(relative_path, 'w', encoding='utf-8') as file:
