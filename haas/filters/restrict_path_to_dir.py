@@ -24,10 +24,12 @@ class RestrictPathToDir(Filter):
     def _convert_to_absolute(self, path):
         # Convert a relative path to absolute path relative to 'restricted_directory'.
         # If it's already absolute, verify it is a subpath of 'restricted_directory'.
-        abs_path = os.path.abspath(os.path.join(self.restricted_directory, path))
-        if not abs_path.startswith(self.restricted_directory):
+        if not os.path.isabs(path):
+            path = os.path.abspath(os.path.join(self.restricted_directory, path))
+
+        if not path.startswith(self.restricted_directory):
             raise ValueError(f"Access denied. The path {path} is not within the restricted directory {self.restricted_directory}")
-        return abs_path
+        return path
 
     def do_it(self, *args, **kwargs):
         if self.path_key in kwargs:

@@ -51,6 +51,21 @@ class CreateAgent(Tool):
                     tool_definitions=["list_directory", "read_text_from_file", "write_whole_text_file", "run_python_test"]
                 )
             ```
+
+            ```psuedocode
+                create_agent(
+                    name="bob_the_developer",
+                    agent_definition="gpt4_agent",
+                    prompt_definition="developer_agent_instructions.md",
+                    tool_definitions=[
+                        {"name": "list_directory", "filters": [{"name": "restrict_path_to_dir", "args": ["/home/bob/"]}]},
+                        "list_directory",
+                        "read_text_from_file",
+                        "write_whole_text_file",
+                        "run_python_test"
+                    ]
+                )
+            ```
         """)
 
     def do_it(self, name, agent_definition, prompt_definition, tool_definitions):

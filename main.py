@@ -1,6 +1,6 @@
 import logging
 from autogen import UserProxyAgent
-from haas.agents.gpt4_agent import Gpt4Agent
+from haas.agents.gpt4_assistant_agent import Gpt4Agent
 from haas.tools.shell_execute import ShellExecute
 from haas.filters.shell_command_filter import ShellCommandFilter
 
